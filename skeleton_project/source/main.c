@@ -3,6 +3,8 @@
 #include <signal.h>
 #include <time.h>
 #include "driver/elevio.h"
+#include "driver/direction_control.h"
+#include "driver/elevator_states.h"
 
 
 
@@ -15,16 +17,24 @@ int main(){
     elevio_motorDirection(DIRN_UP);
 
     while(1){
-        int floor = elevio_floorSensor();
+        int floor = elevio_floorSensor(); //Fra denne kan vi hente hvilken etasje vi er i.
+
+        //Kan sette inn en queue og direction control her som til sammen lager en DIRN_IP, en DIRN_DOWN eller IDLE.
+        //Denne kan så settes inn i eleviomotor_Direction(MotorDirection) som så generer et pådrag til heisen. 
+        //Queue function returning next stop.
+        //Må lage en instans av elev_states kalt states eller noe. 
+        update_direction(elev_states);
+
+        elevio_motorDirection(elev_states->current_direction);
 
         if(floor == 0){
-            elevio_motorDirection(DIRN_UP);
+            elevio_motorDirection(DIRN_UP); 
         }
 
         if(floor == N_FLOORS-1){
             elevio_motorDirection(DIRN_DOWN);
         }
-
+        //De to funksjonene over tar inn enten DIRN_UP eller DIRN_DOWN for å styre retningen på heisen
 
         for(int f = 0; f < N_FLOORS; f++){
             for(int b = 0; b < N_BUTTONS; b++){
@@ -32,6 +42,7 @@ int main(){
                 elevio_buttonLamp(f, b, btnPressed);
             }
         }
+
 
         if(elevio_obstruction()){
             elevio_stopLamp(1);
