@@ -11,7 +11,7 @@ enum floor_request_direction {
     int floor;
     enum floor_request_direction floor_dir;
 
-} OUT_REQ;
+ OUT_REQ;
 */
 typedef struct{
     int buttons_pushed[4][3];

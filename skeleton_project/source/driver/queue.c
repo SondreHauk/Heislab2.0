@@ -9,17 +9,17 @@ QUEUE * queue_setup_maker(states * elev_states){
         }
     }
     return queue_new;
-};
+}
 
 update_queue(QUEUE * queue, states states){
 
-};
+}
 
 //Nullstiller alle knappene i etasjen heisen stopper i
 void reset_floor_buttons(QUEUE * queue, int floor){
     for(int i = 0; i < 3; i++){
         queue->buttons_pushed[floor-1][i] = 0;
-    };
+    }
 }
 
 int check_for_stops(QUEUE * queue){
@@ -29,15 +29,15 @@ int check_for_stops(QUEUE * queue){
             if(queue->buttons_pushed[i][1] == 1 || queue->buttons_pushed[i][2] == 1){
                 next_stop = i + 1;
                 break;
-            };
-        };
-    };
-    if(queue->dir = UP){
-        for(int i = queue->floor; i < 4; i++){
+            }
+        }
+    }
+    elif(queue->dir = UP){
+        for(int i = queue->floor; i < 4; i+){
             if(queue->buttons_pushed[i][1] == 1 || queue->buttons_pushed[i][2] == 1){
                 next_stop = i + 1;
                 break;
-            };
-        };
-    };
-};
+            }
+        }
+    }
+}
