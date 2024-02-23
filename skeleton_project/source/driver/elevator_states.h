@@ -7,7 +7,7 @@ typedef struct elevator_states
 {
     int current_floor;
     MotorDirection current_direction;
-    int next_order;
+    int next_stop;
     int STOP;
     int door;
     int inside_lights[4];
@@ -18,3 +18,6 @@ typedef struct elevator_states
     int inside_requests_updated;
     
 } states;
+
+
+void update_direction(states * elev_states);
