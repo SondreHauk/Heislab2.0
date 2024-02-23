@@ -23,6 +23,6 @@ QUEUE * queue_setup_maker(states * elev_states);
 
 void reset_floor_buttons(QUEUE * queue, int floor);
 
-int * check_for_stops(QUEUE * queue);
+int check_for_stops(QUEUE * queue);
 
 
