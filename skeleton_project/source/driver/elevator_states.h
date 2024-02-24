@@ -19,5 +19,8 @@ typedef struct elevator_states
     
 } states;
 
+states * elevator_setup_maker();
 
 void update_direction(states * elev_states);
+
+void update_light(states * elev_states, int floor);

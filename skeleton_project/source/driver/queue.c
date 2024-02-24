@@ -32,8 +32,8 @@ int check_for_stops(QUEUE * queue){
             }
         }
     }
-    elif(queue->dir = UP){
-        for(int i = queue->floor; i < 4; i+){
+    if(queue->dir = UP){
+        for(int i = queue->floor; i < 4; i++){
             if(queue->buttons_pushed[i][1] == 1 || queue->buttons_pushed[i][2] == 1){
                 next_stop = i + 1;
                 break;

@@ -15,6 +15,7 @@ MotorDirection update_current_direction(int STOP, MotorDirection current_directi
     else{
         current_direction = 0;
     }
+    return current_direction;
 }
 
 MotorDirection get_current_direction(MotorDirection current_direction){

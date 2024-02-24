@@ -5,6 +5,7 @@
 #include "driver/elevio.h"
 #include "driver/direction_control.h"
 #include "driver/elevator_states.h"
+#include "driver/queue.h"
 
 
 
@@ -15,6 +16,10 @@ int main(){
     printf("Press the stop button on the elevator panel to exit\n");
 
     elevio_motorDirection(DIRN_UP);
+
+    states * elev_states = elevator_setup_maker(); //Lager en instans av elev_states som vi kan bruke til å hente og sette verdier i.
+
+    QUEUE * queue = queue_setup_maker(elev_states); //Lager en instans av queue som vi kan bruke til å hente og sette verdier i.
 
     while(1){
         int floor = elevio_floorSensor(); //Fra denne kan vi hente hvilken etasje vi er i.
