@@ -13,4 +13,4 @@ struct elevator_lights
 int update_inside_lights();
 int update_outside_lights();
 
-elevator_lights update_all_lights();
+elevator_lights update_all_lights(); 

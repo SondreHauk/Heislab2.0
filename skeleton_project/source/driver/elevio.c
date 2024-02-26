@@ -79,7 +79,7 @@ void elevio_doorOpenLamp(int value){
     pthread_mutex_unlock(&sockmtx);
 }
 
-//Denne gjør at heisen stopper når stoppknappen er trykket inn. (Foreslått av GitHub Copilot).
+
 void elevio_stopLamp(int value){
     pthread_mutex_lock(&sockmtx);
     send(sockfd, (char[4]){5, value}, 4, 0);
@@ -88,7 +88,7 @@ void elevio_stopLamp(int value){
 
 
 
-//Denne funksjonen returnerer 1 hvis knappen er trykket inn, 0 hvis ikke. (Foreslått av GitHub Copilot).
+
 int elevio_callButton(int floor, ButtonType button){
     pthread_mutex_lock(&sockmtx);
     send(sockfd, (char[4]){6, button, floor}, 4, 0);
@@ -98,7 +98,7 @@ int elevio_callButton(int floor, ButtonType button){
     return buf[1];
 }
 
-//Denne funksjonen returnerer hvilken etasje heisen er i. (Foreslått av GitHub Copilot).
+
 int elevio_floorSensor(void){
     pthread_mutex_lock(&sockmtx);
     send(sockfd, (char[4]){7}, 4, 0);
@@ -108,7 +108,7 @@ int elevio_floorSensor(void){
     return buf[1] ? buf[2] : -1;
 }
 
-//Denne funksjonenn returnerer 1 hvis stoppknappen er trykket inn, 0 hvis ikke. (Foreslått av GitHub Copilot).
+
 int elevio_stopButton(void){
     pthread_mutex_lock(&sockmtx);
     send(sockfd, (char[4]){8}, 4, 0);
@@ -118,8 +118,7 @@ int elevio_stopButton(void){
     return buf[1];
 }
 
-//Denne funskjonen gjør at heisen stopper når det er en hindring i veien. (Foreslått av GitHub Copilot).
-//Denne funksjonen returnerer 1 hvis det er en hindring i veien, 0 hvis ikke. (Foreslått av GitHub Copilot).
+
 int elevio_obstruction(void){
     pthread_mutex_lock(&sockmtx);
     send(sockfd, (char[4]){9}, 4, 0);
