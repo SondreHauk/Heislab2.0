@@ -6,6 +6,8 @@
 elevator * elevator_setup_maker(){
     elevator * elev = malloc(sizeof(elevator));
     elev->current_floor = elevio_floorSensor();
+    elev->prev_floor = elev->current_floor; //Må holde styr på previous floor!
+    elev->between_floors = 0;
     elev->current_direction = 0;
     elev->next_stop = 0;
     elev->STOP = 0;
@@ -27,10 +29,15 @@ void update_direction(elevator * elev){
     elev->current_direction = update_current_direction(STOP, old_direction, current_floor, next_stop);
 }
 
-/*void update_requests(states * elev_states){
-    for (int i = 0; i < 4; i++){
-        elev_states->inside_requests[i] = elevio_get_button_signal(BUTTON_COMMAND, i);
-        elev_states->outside_requests[i] = elevio_get_button_signal(BUTTON_CALL_UP, i);
-        elev_states->outside_requests[i] = elevio_get_button_signal(BUTTON_CALL_DOWN, i);
+/*Denne funksjonen oppdaterer prev_floor til å være current_floor og 
+current_floor til å være den nye etasjen heisen er i.*/
+void update_floors(elevator * elev){
+    if (elevio_floorSensor() != -1){
+    elev->prev_floor = elev->current_floor;
+    elev->current_floor = elevio_floorSensor();
+    elev->between_floors = 0;
     }
-}*/
+    else{
+        elev->between_floors = 1;
+    }
+}

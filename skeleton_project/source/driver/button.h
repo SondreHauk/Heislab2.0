@@ -6,4 +6,4 @@ void updateButton(int floor, ButtonType button_type, elevator * elev_states);
 
 void updateAllButtons(elevator * elev_states);
 
-void reset_floor_buttons(elevator * elev_states);
+void reset_current_floor_buttons(elevator * elev_states);

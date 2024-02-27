@@ -15,6 +15,8 @@ typedef enum{
 typedef struct elevator
 {
     int current_floor;
+    int prev_floor;
+    int between_floors;
     MotorDirection current_direction;
     int next_stop;
     int STOP;
@@ -30,5 +32,7 @@ typedef struct elevator
 elevator * elevator_setup_maker();
 
 void update_direction(elevator * elev);
+
+void update_floors(elevator * elev);
 
 void update_light(elevator * elev, int floor);

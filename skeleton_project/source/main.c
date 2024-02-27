@@ -8,35 +8,32 @@
 #include "driver/queue.h"
 #include "driver/button.h"
 
-
-
 int main(){
     elevio_init();
-    
+
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
-    //elevio_motorDirection(DIRN_UP);
-
-    elevator * elev = elevator_setup_maker(); //Lager en instans av elev_states som vi kan bruke til å hente og sette verdier i.
+    //Lager en instans av elevator som vi kan bruke til å hente og sette verdier i.
+    elevator * elev = elevator_setup_maker();
     reset_all_buttons(elev);
 
     while(1){
+        
         updateAllButtons(elev);
-        int floor = elevio_floorSensor();
-        int direction = elev->current_direction;
-        //Kan sette inn en queue og direction control her som til sammen lager en DIRN_IP, en DIRN_DOWN eller IDLE.
-        //Denne kan så settes inn i eleviomotor_Direction(MotorDirection) som så generer et pådrag til heisen. 
-        //Queue function returning next stop.
-        //Må lage en instans av elev_states kalt states eller noe.
+        update_floors(elev);
 
-        elev_state state = IDLE;
+        MotorDirection direction = elev->current_direction;
+        int current_floor = elev->current_floor;
+        int prev_floor = elev->prev_floor;
+        int between_floors = elev->between_floors; //1 if between floors, 0 if not
+        elev_state state = elev->state;
 
         switch (state)
         {
         case IDLE:
-            reset_floor_buttons(elev);
-            next_stop(elev);
+            reset_current_floor_buttons(elev); //Setter alle knapper på nåværende etasje til 0
+            next_stop(elev); //Setter neste stopp til etasjen med knapp trykket inn
             if(elev->next_stop != elev->current_floor){
             elev->state = MOVING;
             }
@@ -45,8 +42,24 @@ int main(){
             }
             break;
         case MOVING:
-            /* check for orders in same direction, update orders */
-            elev->state = DOORS;
+            /* check for orders in same direction, update temporary order.
+            For every new floor, run same_direction_stop(elev) */
+            int current_floor = elev->current_floor;
+            int prev_floor = elev->prev_floor;
+            MotorDirection current_direction = elev->current_direction;
+            if (current_direction == DIRN_UP){
+                if (current_floor != prev_floor)
+                {
+                    /* code */
+                }
+            }
+            if ((current_floor =! current_floor + 1) && (current_direction = current_floor -1) && (current_floor != -1)){
+                 same_direction_stop(elev);
+            }
+           
+            if (elev->next_stop == elev->current_floor){
+                elev->state = DOORS;
+            }
             break;
         case DOORS:
             /* open doors, wait for 3 seconds, close doors */

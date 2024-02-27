@@ -11,7 +11,7 @@ QUEUE * queue_setup_maker(elevator * elev_states);
 
 void next_stop(elevator * elev_states);
 
-int same_direction_stop(QUEUE * queue, elevator * elev_states);
+void same_direction_stop(elevator * elev_states);
 
 /*
 enum floor_request_direction {
