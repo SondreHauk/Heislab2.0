@@ -24,46 +24,37 @@ int main(){
         update_floors(elev);
 
         MotorDirection direction = elev->current_direction;
+        elev_state state = elev->state;
+        int order = elev->next_stop;
         int current_floor = elev->current_floor;
         int prev_floor = elev->prev_floor;
         int between_floors = elev->between_floors; //1 if between floors, 0 if not
-        elev_state state = elev->state;
 
         switch (state)
         {
         case IDLE:
             reset_current_floor_buttons(elev); //Setter alle knapper på nåværende etasje til 0
             next_stop(elev); //Setter neste stopp til etasjen med knapp trykket inn
-            if(elev->next_stop != elev->current_floor){
-            elev->state = MOVING;
+            if(order != current_floor){
+            state = MOVING;
             }
             else{
-                elev->state = DOORS;
+                state = DOORS;
             }
             break;
         case MOVING:
             /* check for orders in same direction, update temporary order.
             For every new floor, run same_direction_stop(elev) */
-            int current_floor = elev->current_floor;
-            int prev_floor = elev->prev_floor;
-            MotorDirection current_direction = elev->current_direction;
-            if (current_direction == DIRN_UP){
-                if (current_floor != prev_floor)
-                {
-                    /* code */
-                }
+            if (between_floors == 0 && current_floor != prev_floor){
+                same_direction_stop(elev);
             }
-            if ((current_floor =! current_floor + 1) && (current_direction = current_floor -1) && (current_floor != -1)){
-                 same_direction_stop(elev);
-            }
-           
-            if (elev->next_stop == elev->current_floor){
-                elev->state = DOORS;
+            if (order == current_floor){
+                state = DOORS;
             }
             break;
         case DOORS:
             /* open doors, wait for 3 seconds, close doors */
-            elev->state = IDLE;
+            state = IDLE;
             break;
         case STOP:
             /* do STOP stuff. Like deleating all orders etc. */
@@ -102,3 +93,4 @@ int main(){
 
     return 0;
 }
+
