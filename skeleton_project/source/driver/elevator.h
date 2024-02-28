@@ -19,6 +19,7 @@ typedef struct elevator
     int between_floors;
     MotorDirection current_direction;
     int next_stop;
+    int temporary_stop;
     int STOP;
     int door;
     int buttons[4][3];
