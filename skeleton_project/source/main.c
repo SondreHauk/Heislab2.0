@@ -11,7 +11,7 @@
 
 int main(){
     elevio_init();
-
+    // test
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
