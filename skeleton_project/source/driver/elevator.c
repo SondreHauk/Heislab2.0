@@ -10,6 +10,7 @@ elevator * elevator_setup_maker(){
     elev->between_floors = 0;
     elev->current_direction = 0;
     elev->next_stop = 0;
+    elev->temporary_stop = 0;
     elev->STOP = 0;
     elev->door = 0;
     elev->state = INIT;

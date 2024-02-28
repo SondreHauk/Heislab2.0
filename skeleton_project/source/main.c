@@ -27,6 +27,7 @@ int main(){
         MotorDirection direction = elev->current_direction;
         elev_state state = elev->state;
         int order = elev->next_stop;
+        int temp_order = elev->temporary_stop;
         int current_floor = elev->current_floor;
         int prev_floor = elev->prev_floor;
         int between_floors = elev->between_floors; //1 if between floors, 0 if not
@@ -37,7 +38,7 @@ int main(){
             reset_current_floor_buttons(elev); //Setter alle knapper på nåværende etasje til 0
             next_stop(elev); //Setter neste stopp til etasjen med knapp trykket inn
             if(order != current_floor){
-            state = MOVING;
+                state = MOVING;
             }
             else{
                 state = DOORS;
@@ -47,7 +48,8 @@ int main(){
             /* check for orders in same direction, update temporary order.
             For every new floor, run same_direction_stop(elev) */
             if (between_floors == 0 && current_floor != prev_floor){
-                same_direction_stop(elev);
+                same_direction_stop(elev); //Setter temporary stop 
+                break;
             }
             if (order == current_floor){
                 state = DOORS;

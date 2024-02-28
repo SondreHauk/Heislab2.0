@@ -13,11 +13,11 @@ QUEUE * queue_setup_maker(elevator * elev_states){
 }
 
 void same_direction_stop(elevator * elev){
-    int next_stop = elev->next_stop;
+    int temporary_stop = elev->temporary_stop;
     if(elev->current_direction == 1){
         for(int i = elev->current_floor; i < 4; i++){
             if(elev->buttons[i][0] == 1 || elev->buttons[i][1] == 1){
-                next_stop = i;
+                temporary_stop = i;
                 break;
             }
         }
@@ -25,12 +25,12 @@ void same_direction_stop(elevator * elev){
     if(elev->current_direction == -1){
         for(int i = elev->current_floor; i > -1; i--){
             if(elev->buttons[i][0] == 1 || elev->buttons[i][2] == 1){
-                next_stop = i;
+                temporary_stop = i;
                 break;
             }
         }
     }
-    elev->next_stop = next_stop;
+    elev->temporary_stop = temporary_stop;
 }
 
 void next_stop(elevator * elev){
@@ -38,7 +38,7 @@ void next_stop(elevator * elev){
     int current_floor = elev->current_floor;
     int current_direction = elev->current_direction;
     for(int i = 0; i < 4; i++){
-        if(elev->buttons[i][0] == 1 || elev->buttons[i][1] == 1 || elev->buttons[i][2] == 1){
+        if(elev->buttons[0][i] == 1 || elev->buttons[1][i] == 1 || elev->buttons[0][i] == 1){
             next_stop = i;
             break;
         }
