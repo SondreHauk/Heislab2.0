@@ -26,9 +26,6 @@ typedef struct elevator
 
 } elevator;
 
-
-
-
 elevator * elevator_setup_maker();
 
 void update_direction(elevator * elev);
