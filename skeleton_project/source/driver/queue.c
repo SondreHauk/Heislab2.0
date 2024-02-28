@@ -1,9 +1,9 @@
 #include "queue.h"
 
-QUEUE * queue_setup_maker(elevator * elev_states){
+QUEUE * queue_setup_maker(elevator * elev){
     QUEUE * queue_new = (QUEUE *)malloc(sizeof(QUEUE));
-    queue_new->floor = elev_states->current_floor;
-    queue_new->dir = elev_states->current_direction;
+    queue_new->floor = elev->current_floor;
+    queue_new->dir = elev->current_direction;
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 3; j++){
             queue_new->buttons[i][j] = 0;
@@ -12,7 +12,7 @@ QUEUE * queue_setup_maker(elevator * elev_states){
     return queue_new;
 }
 
-void same_direction_stop(elevator * elev){
+/*void same_direction_stop(elevator * elev){
     int temporary_stop = elev->temporary_stop;
     if(elev->current_direction == 1){
         for(int i = elev->current_floor; i < 4; i++){
@@ -31,6 +31,32 @@ void same_direction_stop(elevator * elev){
         }
     }
     elev->temporary_stop = temporary_stop;
+}*/
+
+/*Denne funksjon sjekker om man skal stoppe i etasjen man er i
+ved å sjekke om det er noen i etasjen som skal samme retning som 
+heisen allerede er på vei*/
+void same_dir_stop(elevator * elev, elev_state * state){
+    int current_floor = elev->current_floor;
+    MotorDirection current_direction = elev->current_direction;
+
+    assert(current_direction == 1 || current_direction == -1);
+    assert(current_floor =! -1);
+
+    ButtonType UP = elev->buttons[current_floor][0];
+    ButtonType DOWN = elev->buttons[current_floor][1];
+    if (current_direction == 1 && UP == 1){
+        state = DOORS;
+    }
+    if (current_direction == -1 && DOWN == 1){
+        state = DOORS;
+    }
+}
+
+void arrival_stop(elevator * elev, elev_state * state){
+        if (elev->next_stop == elev->current_floor){
+        state = DOORS;
+    }
 }
 
 void next_stop(elevator * elev){
