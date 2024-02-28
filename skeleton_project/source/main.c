@@ -7,6 +7,7 @@
 #include "driver/elevator.h"
 #include "driver/queue.h"
 #include "driver/button.h"
+#include "doors.h"
 
 int main(){
     elevio_init();
@@ -63,7 +64,9 @@ int main(){
             break;
         case DOORS:
             /* open doors, wait for 3 seconds, close doors */
-            elev->state = IDLE;
+            open_doors(elev);
+            delay(3000);
+            elevio_doorOpenLamp(0);
             break;
         case STOP:
             /* do STOP stuff. Like deleating all orders etc. */

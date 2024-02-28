@@ -13,6 +13,7 @@ void next_stop(elevator * elev_states);
 
 void same_direction_stop(elevator * elev_states);
 
+
 /*
 enum floor_request_direction {
     IDLE,
