@@ -18,7 +18,18 @@ int main(){
     //Lager en instans av elevator som vi kan bruke til å hente og sette verdier i.
     elevator * elev = elevator_setup_maker();
     reset_all_buttons(elev);
-
+    /*initialisering: Hvis heisen befinner seg mellom etasjer, vil den bevege seg ned
+    til den er i en etasje, så sette state til IDLE. */
+    if(elevio_floorSensor() == -1){
+        while(elevio_floorSensor() == -1){
+            elevio_motorDirection(DIRN_DOWN);
+        }
+        elevio_motorDirection(DIRN_STOP);
+        elev->state = IDLE;
+    }
+    else{
+        elev->state = IDLE;
+    }
     while(1){
         
         updateAllButtons(elev);
@@ -35,7 +46,9 @@ int main(){
         switch (state)
         {
         case IDLE:
-            reset_current_floor_buttons(elev); //Setter alle knapper på nåværende etasje til 0
+            if(empty_queue_check(elev) == 0){
+                break;
+            }
             next_stop(elev); //Setter neste stopp til etasjen med knapp trykket inn
             if(order != current_floor){
                 state = MOVING;
@@ -47,6 +60,7 @@ int main(){
         case MOVING:
             /* check for orders in same direction, update temporary order.
             For every new floor, run same_direction_stop(elev) */
+
             if (between_floors == 0 && current_floor != prev_floor){
                 same_direction_stop(elev); //Setter temporary stop 
                 break;
@@ -58,8 +72,16 @@ int main(){
         case DOORS:
             /* open doors, wait for 3 seconds, close doors */
             open_doors(elev);
-            delay(3000);
+            if(elev->state = DOORS){
+                delay(3000);
+            }
             elevio_doorOpenLamp(0);
+            if(empty_queue_check(elev) == 1){
+                elev->state = MOVING;
+            }
+            else{
+                elev->state = IDLE;
+            }
             break;
         case STOP:
             /* do STOP stuff. Like deleating all orders etc. */
