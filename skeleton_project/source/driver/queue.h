@@ -10,10 +10,10 @@ typedef struct queue{
 QUEUE * queue_setup_maker(elevator * elev_states);
 
 void next_stop(elevator * elev_states);
+void arrival_stop(elevator * elev, elev_state * state); 
+void same_dir_stop(elevator * elev, elev_state * state);
 
-void same_direction_stop(elevator * elev_states);
-
-
+//void same_direction_stop(elevator * elev_states);
 /*
 enum floor_request_direction {
     IDLE,
@@ -40,4 +40,3 @@ void reset_floor_buttons(QUEUE * queue, int floor);
 
 int check_for_stops(QUEUE * queue);
 */
-

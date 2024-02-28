@@ -15,13 +15,19 @@ int main(){
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
 
-    //Lager en instans av elevator som vi kan bruke til å hente og sette verdier i.
+    //Lager en instans av elevator.
     elevator * elev = elevator_setup_maker();
+
+    //Setter alle knapper til 0.
     reset_all_buttons(elev);
+
+    //INIT funskjonalitet. Setter heisen til å gå til nærmeste etasje.
 
     while(1){
         
+        //Oppdaterer alle knappene i matrisen
         updateAllButtons(elev);
+        //Oppdaterer current, previous og inbetween floors
         update_floors(elev);
 
         MotorDirection direction = elev->current_direction;
@@ -45,15 +51,9 @@ int main(){
             }
             break;
         case MOVING:
-            /* check for orders in same direction, update temporary order.
-            For every new floor, run same_direction_stop(elev) */
-            if (between_floors == 0 && current_floor != prev_floor){
-                same_direction_stop(elev); //Setter temporary stop 
-                break;
-            }
-            if (order == current_floor){
-                state = DOORS;
-            }
+            update_direction(elev);
+            same_dir_stop(elev, state);
+            arrival_stop(elev, state);
             break;
         case DOORS:
             /* open doors, wait for 3 seconds, close doors */
