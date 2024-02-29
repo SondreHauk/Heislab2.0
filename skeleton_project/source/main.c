@@ -7,24 +7,34 @@
 #include "driver/elevator.h"
 #include "driver/queue.h"
 #include "driver/button.h"
-#include "doors.h"
+#include "driver/doors.h"
 
 int main(){
     elevio_init();
-
+    
     printf("=== Example Program ===\n");
     printf("Press the stop button on the elevator panel to exit\n");
-
     //Lager en instans av elevator.
     elevator * elev = elevator_setup_maker();
 
     //Setter alle knapper til 0.
-    reset_all_buttons(elev);
 
     //INIT funskjonalitet. Setter heisen til å gå til nærmeste etasje.
-
+    if(elevio_floorSensor == -1){
+        while(elevio_floorSensor() == -1){
+            elevio_motorDirection(DIRN_DOWN);
+        }
+        elevio_motorDirection(DIRN_STOP);
+        elev->state = IDLE;
+    }
+    else{
+        elev->state = IDLE;
+    }
     while(1){
-        
+        if(elevio_stopButton() == 1){
+            elev->state = STOP;
+            elevio_stopLamp(1);
+        }
         //Oppdaterer alle knappene i matrisen
         updateAllButtons(elev);
         //Oppdaterer current, previous og inbetween floors
@@ -41,6 +51,7 @@ int main(){
         switch (state)
         {
         case IDLE:
+            elevio_motorDirection(DIRN_STOP);
             reset_current_floor_buttons(elev); //Setter alle knapper på nåværende etasje til 0
             next_stop(elev); //Setter neste stopp til etasjen med knapp trykket inn
             if(order != current_floor){
@@ -58,11 +69,12 @@ int main(){
         case DOORS:
             /* open doors, wait for 3 seconds, close doors */
             open_doors(elev);
-            delay(3000);
+            nanosleep(&(struct timespec){0, 20*1000*1000*1000}, NULL);
             elevio_doorOpenLamp(0);
             break;
         case STOP:
-            /* do STOP stuff. Like deleating all orders etc. */
+            elevio_motorDirection(DIRN_STOP);
+            reset_all_buttons(elev);
             break;
         default:
             break;

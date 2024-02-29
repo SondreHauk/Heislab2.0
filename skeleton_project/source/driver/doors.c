@@ -2,8 +2,12 @@
 
 
 void open_doors(elevator * elev){
-    assert(elevio_floorSensor() != -1);
-    reset_current_floor_buttons(elev);
-    elevio_doorOpenLamp(1);
+    if(elevio_floorSensor() == -1){
+        elev->state = MOVING;
+    }
+    else{
+        reset_current_floor_buttons(elev);
+        elevio_doorOpenLamp(1);
+    }
 }
 

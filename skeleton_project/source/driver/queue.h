@@ -1,5 +1,6 @@
 #pragma once
 #include "elevator.h"
+#include <assert.h>
 
 typedef struct queue{
     int buttons[4][3];

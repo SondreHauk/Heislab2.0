@@ -8,6 +8,7 @@
 
 #include "elevio.h"
 #include "con_load.h"
+//test
 
 static int sockfd;
 static pthread_mutex_t sockmtx;
