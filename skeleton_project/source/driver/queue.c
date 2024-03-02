@@ -35,13 +35,13 @@ QUEUE * queue_setup_maker(elevator * elev){
 
 /*Denne funksjon sjekker om man skal stoppe i etasjen man er i
 ved å sjekke om det er noen i etasjen som skal samme retning som 
-heisen allerede er på vei*/
+heisen allerede er på vei. Går så til DOORS.*/
 void same_dir_stop(elevator * elev, elev_state * state){
     int current_floor = elev->current_floor;
     MotorDirection current_direction = elev->current_direction;
 
     assert(current_direction == 1 || current_direction == -1);
-    assert(current_floor =! -1);
+    assert(current_floor != -1); 
 
     ButtonType UP = elev->buttons[current_floor][0];
     ButtonType DOWN = elev->buttons[current_floor][1];
@@ -53,6 +53,8 @@ void same_dir_stop(elevator * elev, elev_state * state){
     }
 }
 
+/*Sjekker om man er ankommet etasjen til bestillingen, 
+dersom man er i rett etasje, blir stae satt til DOORS*/
 void arrival_stop(elevator * elev, elev_state * state){
         if (elev->next_stop == elev->current_floor){
         state = DOORS;
@@ -70,6 +72,23 @@ void next_stop(elevator * elev){
         }
     }
     elev->next_stop = next_stop;
+}
+
+int empty_queue_check(elevator * elev){
+    int test = 0;
+    for(int i = 0; i < N_FLOORS; i++){
+        for(int j = 0; j < N_BUTTONS; j++){
+            if(elev->buttons[i][j] == 1){
+                test = 1;
+            }
+        }
+    }
+    if(test == 1){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 
 

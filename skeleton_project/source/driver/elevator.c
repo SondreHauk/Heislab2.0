@@ -21,7 +21,8 @@ elevator * elevator_setup_maker(){
     }
     return elev;
 }
-
+/*Denne funksjonen oppdaterer current direction i elev, 
+og setter den fysisk med elevio*/
 void update_direction(elevator * elev){
     int current_floor = elev->current_floor;
     int next_stop = elev->next_stop;
