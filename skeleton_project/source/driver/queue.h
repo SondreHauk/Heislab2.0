@@ -13,24 +13,9 @@ void next_stop(elevator * elev_states);
 void arrival_stop(elevator * elev, elev_state * state); 
 void same_dir_stop(elevator * elev, elev_state * state);
 
-void same_direction_stop(elevator * elev_states);
+//void same_direction_stop(elevator * elev_states);
 
-int empty_queue_check(elevator * elev){
-    int test;
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 3; j++){
-            if(elev->buttons[i][j] == 1){
-                test = 1;
-            }
-        }
-    }
-    if(test == 1){
-        return 1;
-    }
-    else{
-        return 0;
-    }
-}
+int empty_queue_check(elevator * elev);
 
 //void same_direction_stop(elevator * elev_states);
 

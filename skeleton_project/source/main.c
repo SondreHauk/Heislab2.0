@@ -34,10 +34,6 @@ int main(){
         elev->state = IDLE;
     }
 
-
-    //INIT funskjonalitet. Setter heisen til å gå til nærmeste etasje.
-
-
     while(1){
         
         //Oppdaterer alle knappene i matrisen
@@ -67,24 +63,21 @@ int main(){
                 state = DOORS;
             }
             break;
+        
         case MOVING:
 
-            /* check for orders in same direction, update temporary order.
-            For every new floor, run same_direction_stop(elev) */
+            /* 
+            Sets a direction, UP or DOWN, for elevator to move
+            Checks for stops in the direction of movement, and sets state to DOORS if a stop is found
+            Checks if the elevator has arrived at the next stop, and sets state to DOORS if it has
+             */
 
-            if (between_floors == 0 && current_floor != prev_floor){
-                same_direction_stop(elev); //Setter temporary stop 
-                break;
-            }
-            if (order == current_floor){
-                state = DOORS;
-            }
-
-            update_direction(elev);
+            update_direction(elev);            
             same_dir_stop(elev, state);
             arrival_stop(elev, state);
 
             break;
+        
         case DOORS:
             /* open doors, wait for 3 seconds, close doors */
             open_doors(elev);
@@ -99,6 +92,7 @@ int main(){
                 elev->state = IDLE;
             }
             break;
+        
         case STOP:
             /* do STOP stuff. Like deleating all orders etc. */
             break;
