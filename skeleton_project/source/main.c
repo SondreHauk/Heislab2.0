@@ -7,7 +7,8 @@
 #include "driver/elevator.h"
 #include "driver/queue.h"
 #include "driver/button.h"
-#include "doors.h"
+#include "driver/doors.h"
+#include "driver/stop.h"
 
 int main(){
     elevio_init();
@@ -35,7 +36,8 @@ int main(){
     }
 
     while(1){
-        
+        //Sjekker om stop er trykket inn og setter state til STOP
+        STOP_status(elev);
         //Oppdaterer alle knappene i matrisen
         updateAllButtons(elev);
         //Oppdaterer current, previous og inbetween floors
@@ -62,6 +64,7 @@ int main(){
             else{
                 state = DOORS;
             }
+            
             break;
         
         case MOVING:
@@ -73,8 +76,8 @@ int main(){
              */
 
             update_direction(elev);            
-            same_dir_stop(elev, state);
-            arrival_stop(elev, state);
+            same_dir_stop(elev);
+            arrival_stop(elev);
 
             break;
         
@@ -91,12 +94,36 @@ int main(){
             else{
                 elev->state = IDLE;
             }
+            
             break;
         
         case STOP:
-            /* do STOP stuff. Like deleating all orders etc. */
+            /*
+            [S4] Stops elevator
+            [D3] Open doors if in a floor
+            [S5] Resets all order buttons
+
+            [L6] Lights the stop lamp as long as stopButton is pushed
+            [S6] Resets all new orders (ignores new orders)
+
+            [S7] After stop button is released, go to IDLE.
+            */
+
+            elevio_motorDirection(0);
+            STOP_doors(elev);
+            reset_all_buttons(elev);
+
+            while (elevio_stopButton() == 1)
+            {
+                elevio_stopLamp(1);
+            }
+            
+            state = IDLE;
+        
             break;
+
         default:
+
             break;
         }
 
@@ -122,7 +149,7 @@ int main(){
 
 */
         if(elevio_obstruction()){
-            elevio_stopLamp(1);      
+            elevio_stopLamp(0);      
         }
         
         nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
