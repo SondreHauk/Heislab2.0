@@ -62,7 +62,6 @@ void elevio_buttonLamp(int floor, ButtonType button, int value){
     pthread_mutex_unlock(&sockmtx);
 }
 
-
 void elevio_floorIndicator(int floor){
     assert(floor >= 0);
     assert(floor < N_FLOORS);
@@ -72,13 +71,11 @@ void elevio_floorIndicator(int floor){
     pthread_mutex_unlock(&sockmtx);
 }
 
-
 void elevio_doorOpenLamp(int value){
     pthread_mutex_lock(&sockmtx);
     send(sockfd, (char[4]){4, value}, 4, 0);
     pthread_mutex_unlock(&sockmtx);
 }
-
 
 void elevio_stopLamp(int value){
     pthread_mutex_lock(&sockmtx);

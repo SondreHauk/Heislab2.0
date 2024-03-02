@@ -10,8 +10,8 @@ typedef struct queue{
 QUEUE * queue_setup_maker(elevator * elev_states);
 
 void next_stop(elevator * elev_states);
-void arrival_stop(elevator * elev, elev_state * state); 
-void same_dir_stop(elevator * elev, elev_state * state);
+void arrival_stop(elevator * elev); 
+void same_dir_stop(elevator * elev);
 
 //void same_direction_stop(elevator * elev_states);
 
