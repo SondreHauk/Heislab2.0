@@ -23,11 +23,10 @@ elevator * elevator_setup_maker(){
 }
 
 void update_direction(elevator * elev){
-    int STOP = elev->STOP;
     int current_floor = elev->current_floor;
     int next_stop = elev->next_stop;
-    MotorDirection old_direction = elev->current_direction;
-    elev->current_direction = update_current_direction(STOP, old_direction, current_floor, next_stop);
+    elev->current_direction = update_current_direction(current_floor, next_stop);
+    elevio_motorDirection(elev->current_direction);
 }
 
 /*Denne funksjonen oppdaterer prev_floor til å være current_floor og 
