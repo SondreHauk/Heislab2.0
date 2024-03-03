@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <time.h>
+#include <assert.h>
 #include "driver/elevio.h"
 #include "driver/direction_control.h"
 #include "driver/elevator.h"
@@ -12,9 +13,8 @@
 
 int main(){
     elevio_init();
-    // test
-    printf("=== Example Program ===\n");
-    printf("Press the stop button on the elevator panel to exit\n");
+    //Test
+    printf("=== Program Start ===\n");
 
     //Lager en instans av elevator.
     elevator * elev = elevator_setup_maker();
@@ -22,9 +22,11 @@ int main(){
     //Setter alle knapper til 0.
     reset_all_buttons(elev);
 
-    /*initialisering: Hvis heisen befinner seg mellom etasjer, vil den bevege seg ned
-    til den er i en etasje, så sette state til IDLE. */
-    if(elevio_floorSensor() == -1){
+    /*initialisering: 
+    Hvis heisen befinner seg mellom etasjer, 
+    vil den bevege seg ned til nærmeste etasje, 
+    så sette state til IDLE. */
+    if(elevio_floorSensor() == -1){               //[O1], [O2], [O3] Oppstart
         while(elevio_floorSensor() == -1){
             elevio_motorDirection(DIRN_DOWN);
         }
@@ -41,7 +43,7 @@ int main(){
         //Oppdaterer alle knappene i matrisen
         updateAllButtons(elev);
         //Oppdaterer current, previous og inbetween floors
-        update_floors(elev);
+        update_floors(elev);                      //[L3], [L4], [L5] Etasjelys  
 
         MotorDirection direction = elev->current_direction;
         elev_state state = elev->state;
@@ -54,15 +56,17 @@ int main(){
         switch (state)
         {
         case IDLE:
+        //Virker som at den ikke klarer å gå fra IDLE til moving alltid
+        elevio_doorOpenLamp(0);                   //[D3] Heisedøren skal være lukket når den har ubetjente bestillinger                                  
             if(empty_queue_check(elev) == 0){
                 break;
             }
             next_stop(elev); //Setter neste stopp til etasjen med knapp trykket inn
             if(order != current_floor){
-                state = MOVING;
+                elev->state = MOVING;
             }
             else{
-                state = DOORS;
+                elev->state = DOORS;
             }
             
             break;
@@ -82,43 +86,36 @@ int main(){
             break;
         
         case DOORS:
-            /* open doors, wait for 3 seconds, close doors */
-            open_doors(elev);
-            if(elev->state = DOORS){
-                delay(3000);
-            }
-            elevio_doorOpenLamp(0);
-            if(empty_queue_check(elev) == 1){
+            /* 
+            Open doors, wait for 3 seconds, close doors
+            It goes from MOVING to DOORS without stopping the elvator
+            Need something that stops the elevator!
+            */
+
+            elevio_motorDirection(0);             //[S1] Heisen skal alltid stå stille når døren er åpen
+            open_doors(elev);                     //[S2], [D1] Heisdøren skal aldri åpne seg utenfor en etasje, Åpen i tre sek ved ankomst
+                                                   
+            /*if(empty_queue_check(elev) == 1){ //Tror denne er opphav til probelm 3! Går rett til moving uten å sette new_stop (dette skjer i IDLE)
                 elev->state = MOVING;
             }
-            else{
+            else{*/
                 elev->state = IDLE;
-            }
+            //}
             
             break;
         
         case STOP:
-            /*
-            [S4] Stops elevator
-            [D3] Open doors if in a floor
-            [S5] Resets all order buttons
 
-            [L6] Lights the stop lamp as long as stopButton is pushed
-            [S6] Resets all new orders (ignores new orders)
-
-            [S7] After stop button is released, go to IDLE.
-            */
-
-            elevio_motorDirection(0);
-            STOP_doors(elev);
-            reset_all_buttons(elev);
-
-            while (elevio_stopButton() == 1)
-            {
-                elevio_stopLamp(1);
-            }
+            elevio_motorDirection(0);              //[S4] Stops elevator
+            reset_all_buttons(elev);               //[S5] Resets all order buttons
+            STOP_doors(elev);                      //[D3] Open doors if in a floor
             
-            state = IDLE;
+            while (elevio_stopButton() == 1)       //[L6] Lights the stop lamp as long as stopButton is pushed
+            {                                      //[S6] Resets all new orders (ignores new orders) 
+                elevio_stopLamp(1);                 
+            }
+            elevio_stopLamp(0);                    //[S7] After stop button is released, go to IDLE.
+            elev->state = IDLE;
         
             break;
 
@@ -126,6 +123,8 @@ int main(){
 
             break;
         }
+
+        printf("current state: %d \n", elev->state);
 
 
         /*update_direction(elev_states);
@@ -145,9 +144,9 @@ int main(){
                 int btnPressed = elevio_callButton(f, b);
                 elevio_buttonLamp(f, b, btnPressed);
             }
-        }
+        }*/
 
-*/
+
         if(elevio_obstruction()){
             elevio_stopLamp(0);      
         }

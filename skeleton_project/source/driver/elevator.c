@@ -14,8 +14,8 @@ elevator * elevator_setup_maker(){
     elev->STOP = 0;
     elev->door = 0;
     elev->state = INIT;
-    for (int i = 0; i < 4; i++){
-        for (int j = 0; j < 3; j++){
+    for (int i = 0; i < N_FLOORS; i++){
+        for (int j = 0; j < N_BUTTONS; j++){
             elev->buttons[i][j] = 0;
         }
     }
@@ -37,6 +37,7 @@ void update_floors(elevator * elev){
     elev->prev_floor = elev->current_floor;
     elev->current_floor = elevio_floorSensor();
     elev->between_floors = 0;
+    elevio_floorIndicator(elev->current_floor);
     }
     else{
         elev->between_floors = 1;

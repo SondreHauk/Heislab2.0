@@ -11,9 +11,9 @@ MotorDirection update_current_direction(int current_floor, int next_order){
     if (current_floor > next_order){
         new_direction = -1;
     }
-    else{
+    /*else{
         new_direction = 0;
-    }
+    }*/
     return new_direction;
 }
 

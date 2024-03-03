@@ -1,4 +1,5 @@
 #include "queue.h"
+#include <assert.h>
 
 QUEUE * queue_setup_maker(elevator * elev){
     QUEUE * queue_new = (QUEUE *)malloc(sizeof(QUEUE));
@@ -40,21 +41,23 @@ void same_dir_stop(elevator * elev){
     int current_floor = elev->current_floor;
     MotorDirection current_direction = elev->current_direction;
 
-    assert(current_direction == 1 || current_direction == -1);
-    assert(current_floor != -1); 
+    //assert(current_direction == 1 || current_direction == -1);
+    //assert(current_floor != -1); 
 
     ButtonType UP = elev->buttons[current_floor][0];
     ButtonType DOWN = elev->buttons[current_floor][1];
     if (current_direction == 1 && UP == 1){
+        current_direction = 0;
         elev->state = DOORS;
     }
     if (current_direction == -1 && DOWN == 1){
+        current_direction = 0;
         elev->state = DOORS;
     }
 }
 
 /*Sjekker om man er ankommet etasjen til bestillingen, 
-dersom man er i rett etasje, blir stae satt til DOORS*/
+dersom man er i rett etasje, blir state satt til DOORS*/
 void arrival_stop(elevator * elev){
         if (elev->next_stop == elev->current_floor){
         elev->state = DOORS;
@@ -135,5 +138,3 @@ int check_for_stops(QUEUE * queue){for(int i = 0; i < 4; i++){
     }
 }
 */
-
-

@@ -1,4 +1,5 @@
 #include "button.h"
+#include <assert.h>
 
 void updateButton(int floor, ButtonType button_type, elevator * elev_states) {
     if(elevio_callButton(floor, button_type) == 1){
@@ -16,10 +17,11 @@ void updateAllButtons(elevator * elev_states){
 }
 
 void reset_current_floor_buttons(elevator * elev){
-    assert(elev->current_floor != -1); //Make sure the elevator is at an actual floor
-    for(int i = 0; i < N_BUTTONS; i++){
-        elev->buttons[elev->current_floor][i] = 0;
-        elevio_buttonLamp(elev->current_floor, i, 0);
+    if(elev->current_floor != -1){ //Make sure the elevator is at an actual floor
+        for(int i = 0; i < N_BUTTONS; i++){
+            elev->buttons[elev->current_floor][i] = 0;
+            elevio_buttonLamp(elev->current_floor, i, 0);
+        }
     }
 }
 

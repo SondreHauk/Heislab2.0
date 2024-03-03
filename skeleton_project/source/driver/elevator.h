@@ -22,7 +22,7 @@ typedef struct elevator
     int temporary_stop;
     int STOP;
     int door;
-    int buttons[4][3];
+    int buttons[N_FLOORS][N_BUTTONS];
     elev_state state;
 
 } elevator;
