@@ -68,8 +68,8 @@ void next_stop(elevator * elev){
     int next_stop;
     int current_floor = elev->current_floor;
     int current_direction = elev->current_direction;
-    for(int i = 0; i < 4; i++){
-        if(elev->buttons[0][i] == 1 || elev->buttons[1][i] == 1 || elev->buttons[0][i] == 1){
+    for(int i = 0; i < N_FLOORS; i++){
+        if(elev->buttons[i][BUTTON_HALL_UP] == 1 || elev->buttons[i][BUTTON_HALL_DOWN] == 1 || elev->buttons[i][BUTTON_CAB] == 1){
             next_stop = i;
             break;
         }
