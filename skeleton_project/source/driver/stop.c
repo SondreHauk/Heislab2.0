@@ -1,4 +1,5 @@
 #include "stop.h"
+#include <time.h>
 
 void STOP_status(elevator * elev){
     if(elevio_stopButton() == 1){
@@ -12,7 +13,7 @@ void STOP_doors(elevator * elev){
         {
             elevio_doorOpenLamp(1);
         }
-        delay(3000);
+        nanosleep(&(struct timespec){3 ,0}, NULL);
         elevio_doorOpenLamp(0);
     }
 }
