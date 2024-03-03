@@ -61,7 +61,7 @@ int main(){
             if(empty_queue_check(elev) == 0){
                 break;
             }
-            next_stop(elev); //Setter neste stopp til etasjen med knapp trykket inn
+            next_stop(elev);
             if(order != current_floor){
                 elev->state = MOVING;
             }
@@ -80,7 +80,7 @@ int main(){
              */
 
             update_direction(elev);            
-            same_dir_stop(elev);
+            same_dir_stop(elev);                  //[H2] Heisen betjener kun bestillinger fra Hall som er samme vei  
             arrival_stop(elev);
 
             break;
@@ -93,7 +93,8 @@ int main(){
             */
 
             elevio_motorDirection(0);             //[S1] Heisen skal alltid stå stille når døren er åpen
-            open_doors(elev);                     //[S2], [D1] Heisdøren skal aldri åpne seg utenfor en etasje, Åpen i tre sek ved ankomst
+            open_doors(elev);                     //[H3], [S2], [D1] Alle bestillinger i etasjen regnes som utført,
+                                                  //Døren skal ikke åpne seg utenfor etasje, Åpen i tre sek ved ankomst
                                                    
             /*if(empty_queue_check(elev) == 1){ //Tror denne er opphav til probelm 3! Går rett til moving uten å sette new_stop (dette skjer i IDLE)
                 elev->state = MOVING;
