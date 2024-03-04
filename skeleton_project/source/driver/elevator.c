@@ -8,7 +8,8 @@ elevator * elevator_setup_maker(){
     elev->current_floor = elevio_floorSensor();
     elev->prev_floor = elev->current_floor; //Må holde styr på previous floor!
     elev->between_floors = 0;
-    elev->current_direction = 0;
+    elev->current_direction = DIRN_STOP;
+    elev->prev_direction = DIRN_STOP;
     elev->next_stop = 0;
     elev->temporary_stop = 0;
     elev->STOP = 0;
@@ -24,9 +25,8 @@ elevator * elevator_setup_maker(){
 /*Denne funksjonen oppdaterer current direction i elev, 
 og setter den fysisk med elevio*/
 void update_direction(elevator * elev){
-    int current_floor = elev->current_floor;
-    int next_stop = elev->next_stop;
-    elev->current_direction = update_current_direction(current_floor, next_stop);
+    elev->prev_direction = elev->current_direction;
+    elev->current_direction = update_current_direction(elev->current_floor, elev->next_stop);
     elevio_motorDirection(elev->current_direction);
 }
 

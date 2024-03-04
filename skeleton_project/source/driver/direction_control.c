@@ -3,13 +3,13 @@
 MotorDirection update_current_direction(int current_floor, int next_order){
     MotorDirection new_direction;
     if (current_floor == next_order){
-        new_direction = 0;
+        new_direction = DIRN_STOP;
     }
     if (current_floor < next_order){
-        new_direction = 1;
+        new_direction = DIRN_UP;
     }
     if (current_floor > next_order){
-        new_direction = -1;
+        new_direction = DIRN_DOWN;
     }
     /*else{
         new_direction = 0;

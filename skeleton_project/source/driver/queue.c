@@ -41,17 +41,17 @@ void same_dir_stop(elevator * elev){
     int current_floor = elev->current_floor;
     MotorDirection current_direction = elev->current_direction;
 
-    //assert(current_direction == 1 || current_direction == -1);
-    //assert(current_floor != -1); 
-
     ButtonType UP = elev->buttons[current_floor][0];
     ButtonType DOWN = elev->buttons[current_floor][1];
-    if (current_direction == 1 && UP == 1){
+    if (current_direction == DIRN_UP && UP == 1){
         current_direction = 0;
         elev->state = DOORS;
     }
-    if (current_direction == -1 && DOWN == 1){
+    if (current_direction == DIRN_DOWN && DOWN == 1){
         current_direction = 0;
+        elev->state = DOORS;
+    }
+   if (elev->buttons[current_floor][BUTTON_CAB] == 1){
         elev->state = DOORS;
     }
 }
@@ -68,10 +68,23 @@ void next_stop(elevator * elev){
     int next_stop;
     int current_floor = elev->current_floor;
     int current_direction = elev->current_direction;
-    for(int i = 0; i < N_FLOORS; i++){
-        if(elev->buttons[i][BUTTON_HALL_UP] == 1 || elev->buttons[i][BUTTON_HALL_DOWN] == 1 || elev->buttons[i][BUTTON_CAB] == 1){
-            next_stop = i;
-            break;
+    
+    if (elev->prev_direction == DIRN_UP)
+    {
+        for(int i = N_FLOORS -1; i > -1; i--){
+            if(elev->buttons[i][BUTTON_HALL_UP] == 1 || elev->buttons[i][BUTTON_HALL_DOWN] == 1 || elev->buttons[i][BUTTON_CAB] == 1){
+                next_stop = i;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for(int i = 0; i < N_FLOORS; i++){
+            if(elev->buttons[i][BUTTON_HALL_UP] == 1 || elev->buttons[i][BUTTON_HALL_DOWN] == 1 || elev->buttons[i][BUTTON_CAB] == 1){
+                next_stop = i;
+                break;
+            }
         }
     }
     elev->next_stop = next_stop;
