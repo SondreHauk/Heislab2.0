@@ -26,11 +26,13 @@ int main(){
     Hvis heisen befinner seg mellom etasjer, 
     vil den bevege seg ned til nærmeste etasje, 
     så sette state til IDLE. */
+
     if(elevio_floorSensor() == -1){               //[O1], [O2], [O3] Oppstart
         while(elevio_floorSensor() == -1){
             elevio_motorDirection(DIRN_DOWN);
         }
-        elevio_motorDirection(DIRN_STOP);
+        elevio_motorDirection(DIRN_STOP);   
+
         elev->state = IDLE;
     }
     else{
@@ -43,7 +45,8 @@ int main(){
         //Oppdaterer alle knappene i matrisen
         updateAllButtons(elev);
         //Oppdaterer current, previous og inbetween floors
-        update_floors(elev);                      //[L3], [L4], [L5] Etasjelys  
+        update_floors(elev);                      //[L3], [L4], [L5] Etasjelys
+        //update_direction(elev); //Opphavet til at den gåt ned til 1. etg etter INIT pga update_current_direction funksjonen. Når next order = 0, må den til etg 0 for å stoppe.                 
 
         MotorDirection direction = elev->current_direction;
         elev_state state = elev->state;
@@ -53,16 +56,16 @@ int main(){
         int prev_floor = elev->prev_floor;
         int between_floors = elev->between_floors; //1 if between floors, 0 if not
 
-        switch (state)
+        switch (elev->state)
         {
         case IDLE:
-        //Virker som at den ikke klarer å gå fra IDLE til moving alltid
+        
         elevio_doorOpenLamp(0);                   //[D3] Heisedøren skal være lukket når den har ubetjente bestillinger                                  
             if(empty_queue_check(elev) == 0){
                 break;
             }
             next_stop(elev);
-            if(order != current_floor){
+            if(elev->next_stop != elev->current_floor){
                 elev->state = MOVING;
             }
             else{
@@ -125,7 +128,7 @@ int main(){
             break;
         }
 
-        printf("current state: %d \n", elev->state);
+        printf("current state: %d , current floor: %d , current direction: %d\n", elev->state, elev->current_floor + 1, elev->current_direction);
 
 
         /*update_direction(elev_states);
