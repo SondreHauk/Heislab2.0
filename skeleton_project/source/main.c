@@ -128,7 +128,7 @@ int main(){
             }
             else{
                 while (elevio_stopButton() == 1)       //[L6] Lights the stop lamp as long as stopButton is pushed
-                {                                      //[S6] Resets all new orders (ignores new orders) 
+                {                                      //[S6] Resets all new orders (ig MSalthe.nores new orders) 
                     elevio_stopLamp(1);                 
                 }   
                 elevio_stopLamp(0);                    //[S7] After stop button is released, go to IDLE.
@@ -149,9 +149,7 @@ int main(){
 
         if(floor == 0){
             elevio_motorDirection(DIRN_UP); 
-        }
-
-        if(floor == N_FLOORS-1){
+        } MSalthe.
             elevio_motorDirection(DIRN_DOWN);
         }void reset_floor_buttons(states * elev_states)
         //De to funksjonene over tar inn enten DIRN_UP eller DIRN_DOWN for å styre retningen på heisen
