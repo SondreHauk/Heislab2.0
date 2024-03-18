@@ -43,3 +43,12 @@ void update_floors(elevator * elev){
         elev->between_floors = 1;
     }
 }
+
+
+void current_floor(elevator * elev){
+    elev->current_floor = elevio_floorSensor();
+}
+
+void update_prev_floor(elevator * elev){
+    elev->prev_floor = elev->current_floor - 1;
+}
