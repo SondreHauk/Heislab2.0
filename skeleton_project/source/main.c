@@ -45,7 +45,7 @@ int main(){
         //Oppdaterer alle knappene i matrisen
         updateAllButtons(elev);
         //Oppdaterer current, previous og inbetween floors
-        update_floors(elev);                      //[L3], [L4], [L5] Etasjelys
+        update_floors(elev);                     //[L3], [L4], [L5] Etasjelys
         //update_direction(elev); //Opphavet til at den gåt ned til 1. etg etter INIT pga update_current_direction funksjonen. Når next order = 0, må den til etg 0 for å stoppe.                 
 
         MotorDirection direction = elev->current_direction;
@@ -71,7 +71,9 @@ int main(){
             else{
                 elev->state = DOORS;
             }
-            
+            if(elevio_stopButton() == 1){
+                elev->state = STOP;
+            }
             break;
         
         case MOVING:
@@ -82,8 +84,11 @@ int main(){
             Checks if the elevator has arrived at the next stop, and sets state to DOORS if it has
              */
 
-            update_direction(elev);            
-            same_dir_stop(elev);                  //[H2] Heisen betjener kun bestillinger fra Hall som er samme vei  
+            update_direction(elev); 
+            if(elevio_floorSensor() != -1){
+                same_dir_stop(elev);         
+            }           
+            //[H2] Heisen betjener kun bestillinger fra Hall som er samme vei  
             arrival_stop(elev);
 
             break;
@@ -112,15 +117,23 @@ int main(){
 
             elevio_motorDirection(0);              //[S4] Stops elevator
             reset_all_buttons(elev);               //[S5] Resets all order buttons
-            STOP_doors(elev);                      //[D3] Open doors if in a floor
-            
-            while (elevio_stopButton() == 1)       //[L6] Lights the stop lamp as long as stopButton is pushed
-            {                                      //[S6] Resets all new orders (ignores new orders) 
-                elevio_stopLamp(1);                 
+                                                   //[D3] Open doors if in a floor
+            if(elevio_floorSensor() != -1){
+                while(elevio_stopButton() == 1){
+                    elevio_stopLamp(1);
+                    elevio_doorOpenLamp(1);
+                }
+                elevio_stopLamp(0);
+                elev->state = DOORS;
             }
-            elevio_stopLamp(0);                    //[S7] After stop button is released, go to IDLE.
-            elev->state = IDLE;
-        
+            else{
+                while (elevio_stopButton() == 1)       //[L6] Lights the stop lamp as long as stopButton is pushed
+                {                                      //[S6] Resets all new orders (ignores new orders) 
+                    elevio_stopLamp(1);                 
+                }   
+                elevio_stopLamp(0);                    //[S7] After stop button is released, go to IDLE.
+                elev->state = IDLE;
+            }
             break;
 
         default:

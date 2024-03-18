@@ -40,18 +40,16 @@ heisen allerede er på vei. Går så til DOORS.*/
 void same_dir_stop(elevator * elev){
     int current_floor = elev->current_floor;
     MotorDirection current_direction = elev->current_direction;
-
-    ButtonType UP = elev->buttons[current_floor][0];
-    ButtonType DOWN = elev->buttons[current_floor][1];
-    if (current_direction == DIRN_UP && UP == 1){
+    
+    if (elev->current_direction == DIRN_UP && elev->buttons[current_floor][0]){
         current_direction = 0;
         elev->state = DOORS;
     }
-    if (current_direction == DIRN_DOWN && DOWN == 1){
+    if (elev->current_direction == DIRN_DOWN && elev->buttons[current_floor][1]){
         current_direction = 0;
         elev->state = DOORS;
     }
-   if (elev->buttons[current_floor][BUTTON_CAB] == 1){
+   if (elev->buttons[elev->current_floor][BUTTON_CAB] == 1){
         elev->state = DOORS;
     }
 }
@@ -63,12 +61,69 @@ void arrival_stop(elevator * elev){
         elev->state = DOORS;
     }
 }
+/*
+void next_stop(elevator * elev){
+    int next_stop;
+    int current_floor = elev->current_floor;
+    int current_direction = elev->current_direction;
+    int test = 0;
+    if (elev->prev_direction == DIRN_UP)
+    {
+        if(elev->current_floor == 4){
+            for(int i = N_FLOORS - 2; i > -1; i--){
+                if(elev->buttons[i][BUTTON_CAB] == 1){
+                    next_stop = i;
+                    test = 1;
+                    break;
+            }
+        }   
+        }
+        else{
+        for(int i = N_FLOORS -1; i > -1; i--){
+            if(elev->buttons[i][BUTTON_CAB] == 1){
+                next_stop = i;
+                test = 1;
+                break;
+            }
+        }
+        }
+        if(test == 0){
+            for(int i = N_FLOORS - 1; i > -1; i--){
+                if(elev->buttons[i][BUTTON_HALL_UP] == 1 || elev->buttons[i][BUTTON_HALL_DOWN] == 1 || elev->buttons[i][BUTTON_CAB] == 1){
+                    next_stop = i;
+                break;
+            }
+            }
+        }
+        
+    }
+    else
+    {
+        for(int i = 0; i < N_FLOORS; i++){
+            if(elev->buttons[i][BUTTON_CAB] == 1){
+                next_stop = i;
+                test = 1;
+                break;
+            }
+        }
+        if(test == 0){
+            for(int i = 0; i < N_FLOORS; i++){
+            if(elev->buttons[i][BUTTON_HALL_UP] == 1 || elev->buttons[i][BUTTON_HALL_DOWN] == 1 || elev->buttons[i][BUTTON_CAB] == 1){
+                next_stop = i;
+                break;
+            }
+        }
+    }
+    elev->next_stop = next_stop;
+}
+}
+*/
 
 void next_stop(elevator * elev){
     int next_stop;
     int current_floor = elev->current_floor;
     int current_direction = elev->current_direction;
-    
+    int test;
     if (elev->prev_direction == DIRN_UP)
     {
         for(int i = N_FLOORS -1; i > -1; i--){
@@ -89,6 +144,7 @@ void next_stop(elevator * elev){
     }
     elev->next_stop = next_stop;
 }
+
 
 int empty_queue_check(elevator * elev){
     int test = 0;

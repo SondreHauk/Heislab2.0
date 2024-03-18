@@ -35,3 +35,5 @@ void update_direction(elevator * elev);
 void update_floors(elevator * elev);
 
 void update_light(elevator * elev, int floor);
+
+void current_floor(elevator * elev);

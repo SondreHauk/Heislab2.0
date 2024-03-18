@@ -22,7 +22,9 @@ void open_doors(elevator * elev){
             updateAllButtons(elev);
             if(elevio_stopButton() == 1){
                 elev->state = STOP;
-                break;
+            }
+            while(elevio_obstruction() == 1){
+                updateAllButtons(elev);
             }
         }
         
