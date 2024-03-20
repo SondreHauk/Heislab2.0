@@ -2,7 +2,7 @@
 #include "direction_control.h"
 #include "elevio.h"
 #include "button.h"
-//Kode generert av GitHub Copilot
+//Denne funksjonen er delvis generert av GitHub Copilot
 elevator * elevator_setup_maker(){
     elevator * elev = malloc(sizeof(elevator));
     elev->current_floor = elevio_floorSensor();

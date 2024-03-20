@@ -8,6 +8,7 @@ void updateButton(int floor, ButtonType button_type, elevator * elev_states) {
     }
 }
 
+//Kode delvis gnerert av GitHub Copilot
 void updateAllButtons(elevator * elev_states){
     for (int i = 0; i < N_FLOORS; i++){
         for(int j = 0; j < N_BUTTONS; j++){
@@ -25,6 +26,7 @@ void reset_current_floor_buttons(elevator * elev){
     }
 }
 
+//Kode delvis generert av GitHub Copilot
 void reset_all_buttons(elevator * elev_states){
     for(int i = 0; i < N_FLOORS; i++){
         for(int j = 0; j < N_BUTTONS; j++){
